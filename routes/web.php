@@ -1,27 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\MenuController;
+use App\Http\Controllers\MahasiswaController;
 
 Route::get('/', function () {
-    return view('layouts.template');
+    return view('welcome');
 });
 
-Route::get('/beranda', function () {
-    // return view('pages.beranda');
-    return redirect('/beranda');
-});
-
-Route::get('/profil', function () {
-    // return view('pages.profil');
-    return redirect('/profil');
-});
-
-Route::get('/tentang-kami', function () {
-    // return view('pages.tentang-kami');
-    return redirect('/tentang-kami');
-});
-
-
-
-
+Route::get('/mahasiswa', [MahasiswaController::class, 'index']);
