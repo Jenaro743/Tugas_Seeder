@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('krs', function (Blueprint $table) {
-            $table->id();
-            $table->char('npm', 10);
-            $table->char('kode_mk', 8);
+        Schema::create('mahasiswa', function (Blueprint $table) {
+            $table->char('npm', 10)->primary();
+            $table->char('nidn', 10);
+            $table->string('nama', 50);
             $table->timestamps();
 
-            $table->foreign('npm')->references('npm')->on('mahasiswa')->onDelete('cascade');
-            $table->foreign('kode_mk')->references('kode_mk')->on('matakuliah')->onDelete('cascade');
+            $table->foreign('nidn')->references('nidn')->on('dosen')->onDelete('cascade');
         });
     }
 
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('krs');
+        Schema::dropIfExists('mahasiswa');
     }
 };

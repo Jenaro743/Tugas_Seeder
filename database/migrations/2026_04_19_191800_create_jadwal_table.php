@@ -11,12 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('mahasiswa', function (Blueprint $table) {
-            $table->char('npm', 10)->primary();
+        Schema::create('jadwal', function (Blueprint $table) {
+            $table->id();
+            $table->char('kode_mk', 8);
             $table->char('nidn', 10);
-            $table->string('nama', 50);
+
+            $table->char('kelas', 1);
+            $table->string('hari', 10);
+            $table->timestamp('jam');
             $table->timestamps();
 
+
+            $table->foreign('kode_mk')->references('kode_mk')->on('matakuliah')->onDelete('cascade');
             $table->foreign('nidn')->references('nidn')->on('dosen')->onDelete('cascade');
         });
     }
@@ -26,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('mahasiswa');
+        Schema::dropIfExists('jadwal');
     }
 };
