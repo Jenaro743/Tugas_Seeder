@@ -1,62 +1,94 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Mahasiswa;
-use App\Models\Dosen;
 
+use App\Models\Dosen;
+use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
 
 class MahasiswaController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
-        $mahasiswa = Mahasiswa::with(['dosen', 'krs.mataKuliah'])->get();
-        return view('data-mahasiswa.index', compact('mahasiswa'));
+        $mahasiswas = Mahasiswa::all();
+        return view('mahasiswa.index', compact('mahasiswas'));
     }
 
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
         $dosens = Dosen::all();
-        return view('data-mahasiswa.form-mhs', compact('dosens'));
+        return view('mahasiswa.create', compact('dosens'));
     }
 
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
-        $request->validate([
-            'npm' => 'required|unique:mahasiswa,npm',
-            'nama' => 'required',
-            'nidn' => 'required|exists:dosen,nidn',
+        $validated = $request->validate([
+            'npm' => 'required|string|unique:mahasiswa|max:20',
+            'nidn' => 'required|string|max:20',
+            'nama' => 'required|string|max:255',
         ]);
 
-        Mahasiswa::create($request->all());
+        Mahasiswa::create($validated);
 
-        return redirect('/mahasiswa')->with('success', 'Mahasiswa berhasil ditambahkan!');
+        return redirect()->route('mahasiswa.index')->with('success', 'Data mahasiswa berhasil ditambahkan!');
     }
 
-    public function show($id)
+    /**
+     * Display the specified resource.
+     */
+    public function show(Mahasiswa $mahasiswa)
     {
-        $mahasiswa = Mahasiswa::findOrFail($id);
-        return view('data-mahasiswa.show', compact('mahasiswa'));
+        return view('mahasiswa.show', compact('mahasiswa'));
     }
 
-    public function edit($id)
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Mahasiswa $mahasiswa)
     {
-        $mahasiswa = Mahasiswa::findOrFail($id);
         $dosens = Dosen::all();
-        return view('data-mahasiswa.form-mhs', compact('mahasiswa', 'dosens'));
+        return view('mahasiswa.edit', compact('mahasiswa', 'dosens'));
     }
 
-    public function update(Request $request, $id)
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Mahasiswa $mahasiswa)
     {
-        $mahasiswa = Mahasiswa::findOrFail($id);
-
-        $request->validate([
-            'nama' => 'required',
-            'nidn' => 'required|exists:dosen,nidn',
+        $validated = $request->validate([
+            'nidn' => 'required|string|max:20',
+            'nama' => 'required|string|max:255',
         ]);
 
-        $mahasiswa->update($request->only('nama', 'nidn'));
+        $mahasiswa->update($validated);
 
-        return redirect('/mahasiswa')->with('success', 'Mahasiswa berhasil diperbarui!');
+        return redirect()->route('mahasiswa.show', $mahasiswa)->with('success', 'Data mahasiswa berhasil diperbarui!');
+    }
+
+    /**
+     * Show confirmation page before deleting.
+     */
+    public function confirmDelete(Mahasiswa $mahasiswa)
+    {
+        return view('mahasiswa.delete', compact('mahasiswa'));
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Mahasiswa $mahasiswa)
+    {
+        $mahasiswa->delete();
+
+        return redirect()->route('mahasiswa.index')->with('success', 'Data mahasiswa berhasil dihapus!');
     }
 }

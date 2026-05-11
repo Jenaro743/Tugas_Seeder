@@ -14,11 +14,10 @@ return new class extends Migration
         Schema::create('krs', function (Blueprint $table) {
             $table->id();
             $table->char('npm', 10);
-            $table->char('kode_mk', 8);
-            $table->timestamps();
-
+            $table->char('kode_matakuliah', 8);
             $table->foreign('npm')->references('npm')->on('mahasiswa')->onDelete('cascade');
-            $table->foreign('kode_mk')->references('kode_mk')->on('matakuliah')->onDelete('cascade');
+            $table->foreign('kode_matakuliah')->references('kode_matakuliah')->on('matakuliah')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 

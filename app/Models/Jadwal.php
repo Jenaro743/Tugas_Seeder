@@ -2,21 +2,21 @@
 
 namespace App\Models;
 
+use Database\Factories\JadwalFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Jadwal extends Model
 {
-    protected $fillable = [
-        'kode_mk',
-        'nidn',
-        'kelas',
-        'hari',
-        'jam'
-    ];
+    /** @use HasFactory<JadwalFactory> */
+    use HasFactory;
 
-    public function mataKuliah()
+    protected $table = 'jadwal';
+    protected $fillable = ['kode_matakuliah', 'nidn', 'kelas', 'hari', 'jam'];
+
+    public function matakuliah()
     {
-        return $this->belongsTo(MataKuliah::class, 'kode_mk', 'kode_mk');
+        return $this->belongsTo(Matakuliah::class, 'kode_matakuliah', 'kode_matakuliah');
     }
 
     public function dosen()
