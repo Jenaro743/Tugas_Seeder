@@ -38,6 +38,35 @@
                 </a>
             </div>
 
+            <!-- Search Form -->
+            <div class="mb-6">
+                <form method="GET" action="{{ route('mahasiswa.index') }}" class="flex gap-3">
+                    <div class="flex-1">
+                        <input 
+                            type="text" 
+                            name="search" 
+                            placeholder="Cari berdasarkan nama, NPM, atau NIDN..." 
+                            value="{{ $search }}"
+                            class="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-slate-900 placeholder-slate-400 shadow-sm transition-colors focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
+                        >
+                    </div>
+                    <button 
+                        type="submit"
+                        class="rounded-lg bg-cyan-600 px-6 py-2.5 font-semibold text-white shadow-lg shadow-cyan-500/30 transition-all hover:shadow-xl hover:shadow-cyan-500/40 hover:scale-105 active:scale-95"
+                    >
+                        Cari
+                    </button>
+                    @if ($search)
+                        <a 
+                            href="{{ route('mahasiswa.index') }}"
+                            class="rounded-lg bg-slate-200 px-6 py-2.5 font-semibold text-slate-700 shadow-sm transition-all hover:bg-slate-300 hover:scale-105 active:scale-95"
+                        >
+                            Reset
+                        </a>
+                    @endif
+                </form>
+            </div>
+
             <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm shadow-slate-200">
                 <table class="min-w-full divide-y divide-slate-200 text-sm">
                     <thead class="bg-slate-900 text-slate-100">
@@ -84,6 +113,13 @@
                         @endforelse
                     </tbody>
                 </table>
+            </div>
+
+            <!-- Pagination (Tailwind) -->
+            <div class="mt-6">
+                <nav class="flex justify-center" aria-label="Pagination">
+                    {{ $mahasiswas->appends(request()->query())->links() }}
+                </nav>
             </div>
         </div>
     </div>
